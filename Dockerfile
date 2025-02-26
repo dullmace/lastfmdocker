@@ -5,6 +5,11 @@ FROM python:3.9-slim
 RUN apt-get update && apt-get install -y \
     firefox-esr \
     wget \
+    gnupg \
+    gnupg2 \
+    gnupg1 \
+    unzip \
+    curl \
     bzip2 \
     libxtst6 \
     libgtk-3-0 \
@@ -44,12 +49,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY . .
 
-# Create artwork directory
-RUN mkdir -p artworkup
 
 RUN mkdir -p /root/.lastfm_artwork_manager
 
 COPY config.json /root/.lastfm_artwork_manager/
+
+# Create artwork directory
+RUN mkdir -p artworkup
 
 # Expose port
 EXPOSE 5000
