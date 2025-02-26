@@ -1,32 +1,50 @@
 // Show job details (make this function global)
+// Show job details and auto-update
 function showJobDetails(jobId) {
-    fetch(`/api/job-status/${jobId}`)
-        .then((response) => response.json())
-        .then((job) => {
-            const jobDetailsContent = document.getElementById('jobDetailsContent');
-            jobDetailsContent.innerHTML = `
-                <p><strong>Status:</strong> ${job.status}</p>
-                <p><strong>Progress:</strong> ${job.progress}%</p>
-                <p><strong>Message:</strong> ${job.message}</p>
-            `;
-            if (job.missing_artwork && job.missing_artwork.length > 0) {
-                jobDetailsContent.innerHTML += `
-                    <h5>Missing Artwork</h5>
-                    <ul>
-                        ${job.missing_artwork.map((album) => `<li>${album.artist} - ${album.album}</li>`).join('')}
-                    </ul>
+    const jobDetailsContent = document.getElementById('jobDetailsContent');
+    const jobDetailsModal = new bootstrap.Modal(document.getElementById('jobDetailsModal'));
+
+    // Function to fetch and update job details
+    function fetchJobDetails() {
+        fetch(`/api/job-status/${jobId}`)
+            .then((response) => response.json())
+            .then((job) => {
+                // Update the modal content
+                jobDetailsContent.innerHTML = `
+                    <p><strong>Status:</strong> ${job.status}</p>
+                    <p><strong>Phase:</strong> ${job.phase || 'N/A'}</p>
+                    <p><strong>Progress:</strong> ${job.progress || 0}%</p>
+                    <p><strong>Message:</strong> ${job.message || 'No message available'}</p>
                 `;
-            }
-            const jobDetailsModal = new bootstrap.Modal(document.getElementById('jobDetailsModal'));
-            jobDetailsModal.show();
-        })
-        .catch((error) => {
-            console.error('Error fetching job details:', error);
-            const jobDetailsContent = document.getElementById('jobDetailsContent');
-            jobDetailsContent.innerHTML = '<p class="text-danger">Error loading job details</p>';
-            const jobDetailsModal = new bootstrap.Modal(document.getElementById('jobDetailsModal'));
-            jobDetailsModal.show();
-        });
+
+                // Add missing artwork details if available
+                if (job.missing_artwork && job.missing_artwork.length > 0) {
+                    jobDetailsContent.innerHTML += `
+                        <h5>Missing Artwork</h5>
+                        <ul>
+                            ${job.missing_artwork.map((album) => `<li>${album.artist_name} - ${album.album_title}</li>`).join('')}
+                        </ul>
+                    `;
+                }
+
+                // Stop polling if the job is completed or failed
+                if (job.status === 'completed' || job.status === 'failed') {
+                    clearInterval(jobPollingInterval);
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching job details:', error);
+                jobDetailsContent.innerHTML = '<p class="text-danger">Error loading job details</p>';
+                clearInterval(jobPollingInterval); // Stop polling on error
+            });
+    }
+
+    // Fetch job details immediately and start polling
+    fetchJobDetails();
+    const jobPollingInterval = setInterval(fetchJobDetails, 5000); // Poll every 5 seconds
+
+    // Show the modal
+    jobDetailsModal.show();
 }
 
 document.addEventListener('DOMContentLoaded', () => {

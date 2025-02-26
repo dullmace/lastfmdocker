@@ -44,11 +44,10 @@ jobs = {}
 def process_albums(job_id, source_type, source_value, lastfm_username=None, lastfm_sources=None, 
                   check_only=False, lastfm_email=None, lastfm_password=None):
     """Process albums in a background thread"""
-    logger.info(f"Job {job_id} status: {jobs[job_id]}")
-
     try:
         jobs[job_id]['status'] = 'running'
         jobs[job_id]['progress'] = 0
+        jobs[job_id]['phase'] = 'searching'  # Add phase tracking
         jobs[job_id]['message'] = 'Initializing...'
         
         # Extract credentials from config
@@ -194,9 +193,9 @@ def process_albums(job_id, source_type, source_value, lastfm_username=None, last
                 # Process each album for upload
                 successful_uploads = 0
                 failed_uploads = 0
-                
+                jobs[job_id]['phase'] = 'uploading'
+                jobs[job_id]['progress'] = 0                
                 jobs[job_id]['message'] = 'Starting uploads...'
-                jobs[job_id]['progress'] = 0
                 
                 for i, album_entry in enumerate(no_artwork_urls):
                     artist = album_entry.get('artist')
@@ -225,7 +224,7 @@ def process_albums(job_id, source_type, source_value, lastfm_username=None, last
                             failed_uploads += 1
                             continue
                     
-                    jobs[job_id]['message'] = f'Uploading artwork for "{artist} - {album}"'
+                    jobs[job_id]['message'] = f'Uploading artwork for "{album["artist_name"]} - {album["album_title"]}"'
                     
                     # Upload the image
                     upload_success = perform_upload(driver, album_entry, image_path, upload_url, selectors)
@@ -238,7 +237,7 @@ def process_albums(job_id, source_type, source_value, lastfm_username=None, last
                         logger.error(f"Upload failed for '{artist} - {album}'")
                     
                     # Update progress
-                    progress = int((i + 1) / len(no_artwork_urls) * 100)
+                    jobs[job_id]['progress'] = int((i + 1) / len(no_artwork_urls) * 100)
                     jobs[job_id]['progress'] = progress
                     
                     # Delay between uploads to prevent rate limiting
