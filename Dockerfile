@@ -20,6 +20,25 @@ RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.32.0/geckod
     && rm geckodriver-v0.32.0-linux64.tar.gz \
     && chmod +x /usr/local/bin/geckodriver
 
+# Install Chrome
+RUN apt-get update && apt-get install -y \
+    wget \
+    gnupg \
+    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list \
+    && apt-get update && apt-get install -y \
+    google-chrome-stable \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install chromedriver
+RUN CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d. -f1) \
+    && CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION") \
+    && wget -q "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip" \
+    && unzip chromedriver_linux64.zip \
+    && mv chromedriver /usr/local/bin/ \
+    && chmod +x /usr/local/bin/chromedriver \
+    && rm chromedriver_linux64.zip
+    
 # Set working directory
 WORKDIR /app
 
