@@ -70,7 +70,6 @@ def process_albums(job_id, source_type, source_value, lastfm_username=None, last
         records = []
         
         jobs[job_id]['message'] = f'Fetching data from {source_type}...'
-        records = [{'artist_name': 'Artist 1', 'album_title': 'Album 1'}, {'artist_name': 'Artist 2', 'album_title': 'Album 2'}]
         
         if source_type == "album":
             records = get_album_info(sp, source_value)
@@ -107,21 +106,8 @@ def process_albums(job_id, source_type, source_value, lastfm_username=None, last
         no_artwork_urls = []
         
         for i, record in enumerate(records):
-            # Check for missing fields
-            if not record.get('artist_name') or not record.get('album_title') or not record.get('album_art_url'):
-                logger.warning(f"Missing data in entry: {record}")
-                continue  # Skip this entry
-                
-            # Optional: Handle missing track_title gracefully
-            track_title = record.get('track_title', 'Unknown Track')  # Use a default value if track_title is missing
-    
-            # Process the entry
             artist_name = record['artist_name']
             album_title = record['album_title']
-            album_art_url = record['album_art_url']
-
-            # Example: Log the entry being processed
-            logger.info(f"Processing album: {artist_name} - {album_title}")
             
             artwork_info = lastfm.check_album_artwork(artist_name, album_title)
             
@@ -140,7 +126,7 @@ def process_albums(job_id, source_type, source_value, lastfm_username=None, last
                         'album_art_url': album_art_url,
                         'lastfm_url': artwork_info.get('lastfm_url')
                     }
-                    no_artwork_urls.append(record)
+                    no_artwork_urls.append(no_artwork_entry)
             
             # Update progress
             progress = int((i + 1) / len(records) * 100)
@@ -239,7 +225,6 @@ def process_albums(job_id, source_type, source_value, lastfm_username=None, last
                             continue
                     
                     jobs[job_id]['message'] = f'Uploading artwork for "{album["artist_name"]} - {album["album_title"]}"'
-            
                     
                     # Upload the image
                     upload_success = perform_upload(driver, album_entry, image_path, upload_url, selectors)
@@ -315,25 +300,11 @@ def update_config():
     config_manager.save_config()
     return jsonify({'status': 'success'})
 
-def extract_spotify_name(url):
-    """
-    Extracts a human-readable name from a Spotify URL.
-    Example: "https://open.spotify.com/album/12345" -> "Album 12345"
-    """
-    try:
-        parts = url.split('/')
-        if len(parts) > 0:
-            return parts[-1].replace('-', ' ').title()
-    except Exception as e:
-        logger.warning(f"Error extracting name from URL: {url} - {e}")
-    return "Unknown"
-
-
 @app.route('/api/start-job', methods=['POST'])
 def start_job():
     """Start a new job"""
     data = request.json
-
+    
     source_type = data.get('source_type')
     source_value = data.get('source_value')
     check_only = data.get('check_only', False)
@@ -341,26 +312,13 @@ def start_job():
     lastfm_password = data.get('lastfm_password')
     lastfm_username = data.get('lastfm_username')
     lastfm_sources = data.get('lastfm_sources', [])
-
-    # Generate a descriptive job name
-    if source_type == "album":
-        job_name = f"Spotify Album: {extract_spotify_name(source_value)}"
-    elif source_type == "playlist":
-        job_name = f"Spotify Playlist: {extract_spotify_name(source_value)}"
-    elif source_type == "artist":
-        job_name = f"Spotify Artist: {extract_spotify_name(source_value)}"
-    elif source_type == "lastfm_username":
-        job_name = f"Last.fm User: {lastfm_username}"
-    else:
-        job_name = "Unknown Job"
-
-    # Generate a unique job ID
+    
+    # Generate a job ID
     job_id = f"job_{int(time.time())}"
-
+    
     # Initialize job status
     jobs[job_id] = {
         'id': job_id,
-        'name': job_name,  # Add the descriptive name here
         'status': 'initializing',
         'progress': 0,
         'message': 'Job created',
@@ -369,7 +327,7 @@ def start_job():
         'check_only': check_only,
         'start_time': time.time()
     }
-
+    
     # Start processing in a background thread
     thread = threading.Thread(
         target=process_albums,
@@ -384,7 +342,7 @@ def start_job():
     )
     thread.daemon = True
     thread.start()
-
+    
     return jsonify({'job_id': job_id})
 
 @app.route('/api/job-status/<job_id>', methods=['GET'])
