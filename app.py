@@ -17,6 +17,7 @@ from lastfm_artwork_manager import (
 )
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
+from werkzeug.urls import quote as url_quote
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 CORS(app)
