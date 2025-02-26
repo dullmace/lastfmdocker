@@ -1,9 +1,9 @@
 {
   "credentials": {
-    "SPOTIPY_CLIENT_ID": "your_spotify_client_id",
-    "SPOTIPY_CLIENT_SECRET": "your_spotify_client_secret",
-    "LASTFM_API_KEY": "your_lastfm_api_key",
-    "LASTFM_API_SECRET": "your_lastfm_api_secret",
+    "SPOTIPY_CLIENT_ID": "cc1d4b83cad94b499a14bf8937990cee",
+    "SPOTIPY_CLIENT_SECRET": "40d6580042184ba5a0c3d6af4297abdc",
+    "LASTFM_API_KEY": "3ee7e153182c222f30ad88e2bf99e6a6",
+    "LASTFM_API_SECRET": "9103d0dc9c430862616717c472f39bf8",
     "LASTFM_EMAIL": "",
     "LASTFM_PASSWORD": ""
   },
