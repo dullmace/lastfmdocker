@@ -1,6 +1,6 @@
 # **CURRENTLY IN DEVELOPMENT. CREDENTIALS UNSECURE**
 
-# **Last.fm Artwork Manager**
+# **Last.fm Artwork Uploader**
 
 ![Last.fm Artwork Manager](https://img.shields.io/badge/Last.fm-Artwork%20Manager-blue?style=flat-square)
 ![Python](https://img.shields.io/badge/Python-3.9-blue?style=flat-square)
