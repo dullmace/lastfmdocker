@@ -33,6 +33,10 @@ COPY . .
 # Create artwork directory
 RUN mkdir -p artworkup
 
+RUN mkdir -p /root/.lastfm_artwork_manager
+
+COPY config.json /root/.lastfm_artwork_manager/
+
 # Expose port
 EXPOSE 5000
 
