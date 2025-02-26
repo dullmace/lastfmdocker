@@ -19,21 +19,27 @@ RUN apt-get update && apt-get install -y \
     libpci-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Install geckodriver
-RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.32.0/geckodriver-v0.32.0-linux64.tar.gz \
-    && tar -xzf geckodriver-v0.32.0-linux64.tar.gz -C /usr/local/bin \
-    && rm geckodriver-v0.32.0-linux64.tar.gz \
-    && chmod +x /usr/local/bin/geckodriver
+# Install geckodriver - make sure version is compatible with Firefox
+RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.36.0/geckodriver-v0.36.0-linux64.tar.gz \
+    && tar -xvzf geckodriver-v0.36.0-linux64.tar.gz \
+    && chmod +x geckodriver \
+    && mv geckodriver /usr/local/bin/ \
+    && rm geckodriver-v0.36.0-linux64.tar.gz
 
 # Install Chrome
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+RUN apt-get update && apt-get install -y \
+    wget \
+    gnupg \
+    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list \
-    && apt-get update \
-    && apt-get install -y google-chrome-stable \
+    && apt-get update && apt-get install -y \
+    google-chrome-stable \
     && rm -rf /var/lib/apt/lists/*
 
-# Install specific version of chromedriver
-RUN wget -q https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip \
+# Install chromedriver
+RUN CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d. -f1) \
+    && CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION") \
+    && wget -q "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip" \
     && unzip chromedriver_linux64.zip \
     && mv chromedriver /usr/local/bin/ \
     && chmod +x /usr/local/bin/chromedriver \
@@ -41,6 +47,9 @@ RUN wget -q https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriv
     
 # Set working directory
 WORKDIR /app
+
+# Set environment variables for Firefox
+ENV MOZ_HEADLESS=1
 
 # Copy requirements first to leverage Docker cache
 COPY requirements.txt .
