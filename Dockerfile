@@ -64,6 +64,9 @@ COPY config.json /root/.lastfm_artwork_manager/
 # Create artwork directory
 RUN mkdir -p artworkup
 
+# Copy static files
+COPY static/ /app/static/
+
 # Expose port
 EXPOSE 5000
 

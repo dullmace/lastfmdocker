@@ -44,50 +44,32 @@ class ConfigManager:
         self.config_dir = Path.home() / ".lastfm_artwork_manager"
         self.config_file = self.config_dir / "config.json"
         self.session_file = self.config_dir / "session.json"
-        
-        # Default configuration
-        self.config = {
-            "credentials": {
-                "SPOTIPY_CLIENT_ID": os.getenv('SPOTIPY_CLIENT_ID', ''),
-                "SPOTIPY_CLIENT_SECRET": os.getenv('SPOTIPY_CLIENT_SECRET', ''),
-                "LASTFM_API_KEY": os.getenv('LASTFM_API_KEY', ''),
-                "LASTFM_API_SECRET": os.getenv('LASTFM_API_SECRET', ''),
-                "LASTFM_EMAIL": os.getenv('LASTFM_EMAIL', ''),
-                "LASTFM_PASSWORD": os.getenv('LASTFM_PASSWORD', '')
-            },
-            "settings": {
-                "BROWSER": os.getenv('BROWSER', 'firefox'),
-                "WAIT_TIME": 5,
-                "UPLOAD_DELAY": 8,
-                "MAX_RETRIES": 3,
-                "RETRY_DELAY": 5,
-                "HEADLESS": True  # Default to headless for server
-            },
-            "paths": {
-                "JSON_FILE_PATH": 'no_artwork_albums.json',
-                "ARTWORK_FOLDER": 'artworkup',
-                "LOG_FILE": 'lastfm_artwork_manager.log'
-            }
-        }
+        self.default_config_file = Path(__file__).parent / "default_config.json"  # Default config in project directory
+               
         
         # Create config directory if it doesn't exist
         self.config_dir.mkdir(exist_ok=True)
         
+        # Ensure session.json exists
+        if not self.session_file.exists():
+            self.save_session({})  # Initialize with an empty session
+            
+        # Copy default config if it doesn't exist
+        if not self.config_file.exists():
+            shutil.copy(self.default_config_file, self.config_file)
+        
         # Load existing configuration if available
-        self.load_config()
+        self.config = self.load_config()
     
     def load_config(self):
         """Load configuration from file."""
         if self.config_file.exists():
             try:
                 with open(self.config_file, 'r') as f:
-                    saved_config = json.load(f)
-                    # Update config with saved values, preserving defaults for any missing keys
-                    for section in self.config:
-                        if section in saved_config:
-                            self.config[section].update(saved_config[section])
+                    return json.load(f)
             except Exception as e:
                 logger.warning(f"Could not load configuration file: {e}")
+        return {}
     
     def save_config(self):
         """Save configuration to file."""
@@ -113,7 +95,7 @@ class ConfigManager:
                     return json.load(f)
             except Exception as e:
                 logger.warning(f"Could not load session data: {e}")
-        return None
+        return {}
     
     def clear_session(self):
         """Clear session data."""
