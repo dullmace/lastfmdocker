@@ -1,0 +1,23 @@
+{
+  "credentials": {
+    "SPOTIPY_CLIENT_ID": "your_spotify_client_id",
+    "SPOTIPY_CLIENT_SECRET": "your_spotify_client_secret",
+    "LASTFM_API_KEY": "your_lastfm_api_key",
+    "LASTFM_API_SECRET": "your_lastfm_api_secret",
+    "LASTFM_EMAIL": "",
+    "LASTFM_PASSWORD": ""
+  },
+  "settings": {
+    "BROWSER": "firefox",
+    "WAIT_TIME": 5,
+    "UPLOAD_DELAY": 8,
+    "MAX_RETRIES": 3,
+    "RETRY_DELAY": 5,
+    "HEADLESS": true
+  },
+  "paths": {
+    "JSON_FILE_PATH": "no_artwork_albums.json",
+    "ARTWORK_FOLDER": "artworkup",
+    "LOG_FILE": "lastfm_artwork_manager.log"
+  }
+}
