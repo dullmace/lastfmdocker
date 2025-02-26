@@ -107,8 +107,21 @@ def process_albums(job_id, source_type, source_value, lastfm_username=None, last
         no_artwork_urls = []
         
         for i, record in enumerate(records):
+            # Check for missing fields
+            if not record.get('artist_name') or not record.get('album_title') or not record.get('album_art_url'):
+                logger.warning(f"Missing data in entry: {record}")
+                continue  # Skip this entry
+                
+            # Optional: Handle missing track_title gracefully
+            track_title = record.get('track_title', 'Unknown Track')  # Use a default value if track_title is missing
+    
+            # Process the entry
             artist_name = record['artist_name']
             album_title = record['album_title']
+            album_art_url = record['album_art_url']
+
+            # Example: Log the entry being processed
+            logger.info(f"Processing album: {artist_name} - {album_title}")
             
             artwork_info = lastfm.check_album_artwork(artist_name, album_title)
             
