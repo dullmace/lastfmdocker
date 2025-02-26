@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     jobsList.innerHTML = jobs.map((job) => `
                         <div class="card mb-3">
                             <div class="card-body">
-                                <h5>Job ${job.id}</h5>
+                                <h5>${job.name}</h5> <!-- Use the descriptive job name -->
                                 <p>Status: ${job.status}</p>
                                 <p>Progress: ${job.progress}%</p>
                                 <button class="btn btn-sm btn-primary" onclick="showJobDetails('${job.id}')">View Details</button>
@@ -150,6 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 jobsList.innerHTML = '<p class="text-danger">Error loading jobs</p>';
             });
     }
+
 
     // Save settings
     function saveSettings() {
