@@ -1,0 +1,12 @@
+# docker-compose.yml
+version: '3'
+
+services:
+  lastfm-artwork-manager:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ~/.lastfm_artwork_manager:/root/.lastfm_artwork_manager
+      - ./artworkup:/app/artworkup
+    restart: unless-stopped
