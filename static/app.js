@@ -1,3 +1,34 @@
+// Show job details (make this function global)
+function showJobDetails(jobId) {
+    fetch(`/api/job-status/${jobId}`)
+        .then((response) => response.json())
+        .then((job) => {
+            const jobDetailsContent = document.getElementById('jobDetailsContent');
+            jobDetailsContent.innerHTML = `
+                <p><strong>Status:</strong> ${job.status}</p>
+                <p><strong>Progress:</strong> ${job.progress}%</p>
+                <p><strong>Message:</strong> ${job.message}</p>
+            `;
+            if (job.missing_artwork && job.missing_artwork.length > 0) {
+                jobDetailsContent.innerHTML += `
+                    <h5>Missing Artwork</h5>
+                    <ul>
+                        ${job.missing_artwork.map((album) => `<li>${album.artist} - ${album.album}</li>`).join('')}
+                    </ul>
+                `;
+            }
+            const jobDetailsModal = new bootstrap.Modal(document.getElementById('jobDetailsModal'));
+            jobDetailsModal.show();
+        })
+        .catch((error) => {
+            console.error('Error fetching job details:', error);
+            const jobDetailsContent = document.getElementById('jobDetailsContent');
+            jobDetailsContent.innerHTML = '<p class="text-danger">Error loading job details</p>';
+            const jobDetailsModal = new bootstrap.Modal(document.getElementById('jobDetailsModal'));
+            jobDetailsModal.show();
+        });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const jobForm = document.getElementById('jobForm');
     const sourceType = document.getElementById('sourceType');
@@ -9,8 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const jobsList = document.getElementById('jobsList');
     const refreshJobsBtn = document.getElementById('refreshJobsBtn');
     const settingsForm = document.getElementById('settingsForm');
-    const jobDetailsContent = document.getElementById('jobDetailsContent');
-    const jobDetailsModal = new bootstrap.Modal(document.getElementById('jobDetailsModal'));
 
     // Initialize form fields
     updateFormFields();
@@ -101,33 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch((error) => {
                 console.error('Error loading jobs:', error);
                 jobsList.innerHTML = '<p class="text-danger">Error loading jobs</p>';
-            });
-    }
-
-    // Show job details
-    function showJobDetails(jobId) {
-        fetch(`/api/job-status/${jobId}`)
-            .then((response) => response.json())
-            .then((job) => {
-                jobDetailsContent.innerHTML = `
-                    <p><strong>Status:</strong> ${job.status}</p>
-                    <p><strong>Progress:</strong> ${job.progress}%</p>
-                    <p><strong>Message:</strong> ${job.message}</p>
-                `;
-                if (job.missing_artwork && job.missing_artwork.length > 0) {
-                    jobDetailsContent.innerHTML += `
-                        <h5>Missing Artwork</h5>
-                        <ul>
-                            ${job.missing_artwork.map((album) => `<li>${album.artist} - ${album.album}</li>`).join('')}
-                        </ul>
-                    `;
-                }
-                jobDetailsModal.show();
-            })
-            .catch((error) => {
-                console.error('Error fetching job details:', error);
-                jobDetailsContent.innerHTML = '<p class="text-danger">Error loading job details</p>';
-                jobDetailsModal.show();
             });
     }
 
