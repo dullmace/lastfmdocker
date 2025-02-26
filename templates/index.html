@@ -1,4 +1,3 @@
-<!-- templates/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,53 +14,41 @@
         .container {
             max-width: 960px;
         }
-        .header {
-            margin-bottom: 30px;
-        }
-        .card {
-            margin-bottom: 20px;
-        }
-        .job-card {
-            margin-bottom: 15px;
-        }
         .hidden {
             display: none;
         }
-        .album-list {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        .album-item {
-            padding: 8px;
-            border-bottom: 1px solid #eee;
-        }
-        .album-item:last-child {
-            border-bottom: none;
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header text-center">
+        <header class="text-center mb-4">
             <h1 class="display-4">Last.fm Artwork Manager</h1>
             <p class="lead">Find and upload missing album artwork to Last.fm</p>
-        </div>
+        </header>
 
-        <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+        <!-- Navigation Tabs -->
+        <ul class="nav nav-tabs mb-4" id="mainTabs" role="tablist">
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Start Job</button>
+                <button class="nav-link active" id="start-job-tab" data-bs-toggle="tab" data-bs-target="#start-job" type="button" role="tab" aria-controls="start-job" aria-selected="true">Start Job</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="jobs-tab" data-bs-toggle="tab" data-bs-target="#jobs" type="button" role="tab" aria-controls="jobs" aria-selected="false">Active Jobs</button>
+                <button class="nav-link" id="active-jobs-tab" data-bs-toggle="tab" data-bs-target="#active-jobs" type="button" role="tab" aria-controls="active-jobs" aria-selected="false">Active Jobs</button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab" aria-controls="settings" aria-selected="false">Settings</button>
             </li>
         </ul>
 
-        <div class="tab-content" id="myTabContent">
+        <!-- Tab Content -->
+        <div class="tab-content" id="mainTabContent">
             <!-- Start Job Tab -->
-            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div class="tab-pane fade show active" id="start-job" role="tabpanel" aria-labelledby="start-job-tab">
                 <div class="card">
                     <div class="card-header">
                         <h5>Start a New Job</h5>
@@ -78,96 +65,22 @@
                                     <option value="lastfm_username">Last.fm Username</option>
                                 </select>
                             </div>
-
                             <div class="mb-3 hidden" id="spotifyUrlField">
                                 <label for="spotifyUrl" class="form-label">Spotify URL</label>
                                 <input type="url" class="form-control" id="spotifyUrl" placeholder="https://open.spotify.com/...">
-                                <div class="form-text">Enter the full Spotify URL</div>
                             </div>
-
                             <div class="mb-3 hidden" id="lastfmUsernameField">
                                 <label for="lastfmUsername" class="form-label">Last.fm Username</label>
                                 <input type="text" class="form-control" id="lastfmUsername" placeholder="Enter Last.fm username">
                             </div>
-
-                            <div class="mb-3 hidden" id="lastfmSourcesField">
-                                <label class="form-label">Last.fm Data Sources</label>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="recenttracks" id="recentTracks">
-                                    <label class="form-check-label" for="recentTracks">
-                                        Recently Played Tracks
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="lovedtracks" id="lovedTracks">
-                                    <label class="form-check-label" for="lovedTracks">
-                                        Loved Tracks
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="topalbums_7day" id="topAlbums7day">
-                                    <label class="form-check-label" for="topAlbums7day">
-                                        Top Albums - Last 7 Days
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="topalbums_1month" id="topAlbums1month">
-                                    <label class="form-check-label" for="topAlbums1month">
-                                        Top Albums - Last Month
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="topalbums_3month" id="topAlbums3month">
-                                    <label class="form-check-label" for="topAlbums3month">
-                                        Top Albums - Last 3 Months
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="topalbums_6month" id="topAlbums6month">
-                                    <label class="form-check-label" for="topAlbums6month">
-                                        Top Albums - Last 6 Months
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="topalbums_12month" id="topAlbums12month">
-                                    <label class="form-check-label" for="topAlbums12month">
-                                        Top Albums - Last Year
-                            <div class="mb-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="checkOnly">
-                                    <label class="form-check-label" for="checkOnly">
-                                        Check only (don't upload artwork)
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="mb-3 hidden" id="lastfmCredentialsField">
-                                <div class="card">
-                                    <div class="card-header">
-                                        Last.fm Login Credentials (for uploading)
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="mb-3">
-                                            <label for="lastfmEmail" class="form-label">Email</label>
-                                            <input type="email" class="form-control" id="lastfmEmail" placeholder="Enter Last.fm email">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="lastfmPassword" class="form-label">Password</label>
-                                            <input type="password" class="form-control" id="lastfmPassword" placeholder="Enter Last.fm password">
-                                        </div>
-                                        <div class="form-text">Credentials are only used for this session and are not stored on the server.</div>
-                                    </div>
-                                </div>
-                            </div>
-
                             <button type="submit" class="btn btn-primary">Start Job</button>
                         </form>
                     </div>
                 </div>
             </div>
 
-            <!-- Jobs Tab -->
-            <div class="tab-pane fade" id="jobs" role="tabpanel" aria-labelledby="jobs-tab">
+            <!-- Active Jobs Tab -->
+            <div class="tab-pane fade" id="active-jobs" role="tabpanel" aria-labelledby="active-jobs-tab">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5>Active Jobs</h5>
@@ -176,12 +89,9 @@
                         </button>
                     </div>
                     <div class="card-body">
-                        <div id="jobsList">
-                            <div class="text-center py-4">
-                                <div class="spinner-border text-primary" role="status">
-                                    <span class="visually-hidden">Loading...</span>
-                                </div>
-                                <p class="mt-2">Loading jobs...</p>
+                        <div id="jobsList" class="loading-spinner">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
                             </div>
                         </div>
                     </div>
@@ -199,7 +109,6 @@
                             <div class="mb-3">
                                 <label for="spotifyClientId" class="form-label">Spotify Client ID</label>
                                 <input type="text" class="form-control" id="spotifyClientId" placeholder="Enter Spotify Client ID">
-                                <div class="form-text">Get from <a href="https://developer.spotify.com/dashboard/" target="_blank">Spotify Developer Dashboard</a></div>
                             </div>
                             <div class="mb-3">
                                 <label for="spotifyClientSecret" class="form-label">Spotify Client Secret</label>
@@ -208,7 +117,6 @@
                             <div class="mb-3">
                                 <label for="lastfmApiKey" class="form-label">Last.fm API Key</label>
                                 <input type="text" class="form-control" id="lastfmApiKey" placeholder="Enter Last.fm API Key">
-                                <div class="form-text">Get from <a href="https://www.last.fm/api/account/create" target="_blank">Last.fm API</a></div>
                             </div>
                             <div class="mb-3">
                                 <label for="lastfmApiSecret" class="form-label">Last.fm API Secret</label>
@@ -220,464 +128,10 @@
                 </div>
             </div>
         </div>
-
-        <!-- Job Details Modal -->
-        <div class="modal fade" id="jobDetailsModal" tabindex="-1" aria-labelledby="jobDetailsModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="jobDetailsModalLabel">Job Details</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body" id="jobDetailsContent">
-                        <div class="text-center py-4">
-                            <div class="spinner-border text-primary" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                            <p class="mt-2">Loading job details...</p>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
+    <!-- External JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Form elements
-            const jobForm = document.getElementById('jobForm');
-            const sourceType = document.getElementById('sourceType');
-            const spotifyUrlField = document.getElementById('spotifyUrlField');
-            const spotifyUrl = document.getElementById('spotifyUrl');
-            const lastfmUsernameField = document.getElementById('lastfmUsernameField');
-            const lastfmUsername = document.getElementById('lastfmUsername');
-            const lastfmSourcesField = document.getElementById('lastfmSourcesField');
-            const checkOnly = document.getElementById('checkOnly');
-            const lastfmCredentialsField = document.getElementById('lastfmCredentialsField');
-            const lastfmEmail = document.getElementById('lastfmEmail');
-            const lastfmPassword = document.getElementById('lastfmPassword');
-            
-            // Settings form
-            const settingsForm = document.getElementById('settingsForm');
-            const spotifyClientId = document.getElementById('spotifyClientId');
-            const spotifyClientSecret = document.getElementById('spotifyClientSecret');
-            const lastfmApiKey = document.getElementById('lastfmApiKey');
-            const lastfmApiSecret = document.getElementById('lastfmApiSecret');
-            
-            // Jobs list
-            const jobsList = document.getElementById('jobsList');
-            const refreshJobsBtn = document.getElementById('refreshJobsBtn');
-            
-            // Job details modal
-            const jobDetailsModal = new bootstrap.Modal(document.getElementById('jobDetailsModal'));
-            const jobDetailsContent = document.getElementById('jobDetailsContent');
-            
-            // Load settings
-            loadSettings();
-            
-            // Load jobs
-            loadJobs();
-            
-            // Event listeners
-            sourceType.addEventListener('change', updateFormFields);
-            checkOnly.addEventListener('change', updateFormFields);
-            refreshJobsBtn.addEventListener('click', loadJobs);
-            
-            jobForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                submitJob();
-            });
-            
-            settingsForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                saveSettings();
-            });
-            
-            // Functions
-            function updateFormFields() {
-                // Hide all conditional fields
-                spotifyUrlField.classList.add('hidden');
-                lastfmUsernameField.classList.add('hidden');
-                lastfmSourcesField.classList.add('hidden');
-                
-                // Show fields based on source type
-                if (sourceType.value === 'album' || sourceType.value === 'playlist' || sourceType.value === 'artist') {
-                    spotifyUrlField.classList.remove('hidden');
-                } else if (sourceType.value === 'lastfm_username') {
-                    lastfmUsernameField.classList.remove('hidden');
-                    lastfmSourcesField.classList.remove('hidden');
-                }
-                
-                // Show Last.fm credentials if not check-only
-                if (!checkOnly.checked) {
-                    lastfmCredentialsField.classList.remove('hidden');
-                } else {
-                    lastfmCredentialsField.classList.add('hidden');
-                }
-            }
-            
-            function loadSettings() {
-                fetch('/api/config')
-                    .then(response => response.json())
-                    .then(data => {
-                        // Just show if credentials are set with placeholder text
-                        if (data.spotify_client_id) {
-                            spotifyClientId.placeholder = '••••••••••••••••••••••••••';
-                        }
-                        if (data.spotify_client_secret) {
-                            spotifyClientSecret.placeholder = '••••••••••••••••••••••••••';
-                        }
-                        if (data.lastfm_api_key) {
-                            lastfmApiKey.placeholder = '••••••••••••••••••••••••••';
-                        }
-                        if (data.lastfm_api_secret) {
-                            lastfmApiSecret.placeholder = '••••••••••••••••••••••••••';
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error loading settings:', error);
-                        showAlert('Error loading settings', 'danger');
-                    });
-            }
-            
-            function saveSettings() {
-                const settings = {};
-                
-                if (spotifyClientId.value) {
-                    settings.spotify_client_id = spotifyClientId.value;
-                }
-                if (spotifyClientSecret.value) {
-                    settings.spotify_client_secret = spotifyClientSecret.value;
-                }
-                if (lastfmApiKey.value) {
-                    settings.lastfm_api_key = lastfmApiKey.value;
-                }
-                if (lastfmApiSecret.value) {
-                    settings.lastfm_api_secret = lastfmApiSecret.value;
-                }
-                
-                fetch('/api/config', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(settings)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        showAlert('Settings saved successfully', 'success');
-                        // Clear form
-                        settingsForm.reset();
-                        loadSettings();
-                    } else {
-                        showAlert('Error saving settings', 'danger');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error saving settings:', error);
-                    showAlert('Error saving settings', 'danger');
-                });
-            }
-            
-            function submitJob() {
-                // Validate form
-                if (!sourceType.value) {
-                    showAlert('Please select a data source', 'danger');
-                    return;
-                }
-                
-                if ((sourceType.value === 'album' || sourceType.value === 'playlist' || sourceType.value === 'artist') && !spotifyUrl.value) {
-                    showAlert('Please enter a Spotify URL', 'danger');
-                    return;
-                }
-                
-                if (sourceType.value === 'lastfm_username' && !lastfmUsername.value) {
-                    showAlert('Please enter a Last.fm username', 'danger');
-                    return;
-                }
-                
-                if (sourceType.value === 'lastfm_username') {
-                    // Check if at least one source is selected
-                    const sources = document.querySelectorAll('#lastfmSourcesField input[type="checkbox"]:checked');
-                    if (sources.length === 0) {
-                        showAlert('Please select at least one Last.fm data source', 'danger');
-                        return;
-                    }
-                }
-                
-                if (!checkOnly.checked && (!lastfmEmail.value || !lastfmPassword.value)) {
-                    showAlert('Please enter Last.fm credentials for uploading', 'danger');
-                    return;
-                }
-                
-                // Prepare job data
-                const jobData = {
-                    source_type: sourceType.value,
-                    check_only: checkOnly.checked
-                };
-                
-                if (sourceType.value === 'album' || sourceType.value === 'playlist' || sourceType.value === 'artist') {
-                    jobData.source_value = spotifyUrl.value;
-                } else if (sourceType.value === 'lastfm_username') {
-                    jobData.source_value = lastfmUsername.value;
-                    jobData.lastfm_username = lastfmUsername.value;
-                    
-                    // Get selected sources
-                    const sources = [];
-                    document.querySelectorAll('#lastfmSourcesField input[type="checkbox"]:checked').forEach(checkbox => {
-                        const value = checkbox.value;
-                        if (value.startsWith('topalbums_')) {
-                            const period = value.split('_')[1];
-                            sources.push({
-                                type: 'topalbums',
-                                period: period
-                            });
-                        } else {
-                            sources.push({
-                                type: value
-                            });
-                        }
-                    });
-                    
-                    jobData.lastfm_sources = sources;
-                }
-                
-                if (!checkOnly.checked) {
-                    jobData.lastfm_email = lastfmEmail.value;
-                    jobData.lastfm_password = lastfmPassword.value;
-                }
-                
-                // Submit job
-                fetch('/api/start-job', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(jobData)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.job_id) {
-                        showAlert('Job started successfully', 'success');
-                        // Switch to jobs tab
-                        document.getElementById('jobs-tab').click();
-                        // Reset form
-                        jobForm.reset();
-                        updateFormFields();
-                        // Load jobs
-                        loadJobs();
-                    } else {
-                        showAlert('Error starting job', 'danger');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error starting job:', error);
-                    showAlert('Error starting job', 'danger');
-                });
-            }
-            
-            function loadJobs() {
-                fetch('/api/jobs')
-                    .then(response => response.json())
-                    .then(jobs => {
-                        if (jobs.length === 0) {
-                            jobsList.innerHTML = '<div class="text-center py-4">No active jobs</div>';
-                            return;
-                        }
-                        
-                        let html = '';
-                        jobs.forEach(job => {
-                            const startTime = new Date(job.start_time * 1000).toLocaleString();
-                            let statusBadge = '';
-                            
-                            switch (job.status) {
-                                case 'initializing':
-                                case 'running':
-                                    statusBadge = '<span class="badge bg-primary">Running</span>';
-                                    break;
-                                case 'completed':
-                                    statusBadge = '<span class="badge bg-success">Completed</span>';
-                                    break;
-                                case 'failed':
-                                    statusBadge = '<span class="badge bg-danger">Failed</span>';
-                                    break;
-                                default:
-                                    statusBadge = '<span class="badge bg-secondary">Unknown</span>';
-                            }
-                            
-                            html += `
-                                <div class="card job-card">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <h5 class="card-title mb-0">Job ${job.id}</h5>
-                                            ${statusBadge}
-                                        </div>
-                                        <h6 class="card-subtitle mb-2 text-muted">Started: ${startTime}</h6>
-                                        <p class="card-text">${job.message || 'Processing...'}</p>
-                                        
-                                        ${job.status === 'running' ? `
-                                            <div class="progress mb-3">
-                                                <div class="progress-bar" role="progressbar" style="width: ${job.progress}%;" 
-                                                    aria-valuenow="${job.progress}" aria-valuemin="0" aria-valuemax="100">
-                                                    ${job.progress}%
-                                                </div>
-                                            </div>
-                                        ` : ''}
-                                        
-                                        <div class="d-flex justify-content-between">
-                                            <button class="btn btn-sm btn-primary view-details" data-job-id="${job.id}">
-                                                View Details
-                                            </button>
-                                            
-                                            ${job.status === 'completed' || job.status === 'failed' ? `
-                                                <button class="btn btn-sm btn-outline-danger clear-job" data-job-id="${job.id}">
-                                                    Clear
-                                                </button>
-                                            ` : ''}
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                        });
-                        
-                        jobsList.innerHTML = html;
-                        
-                        // Add event listeners to buttons
-                        document.querySelectorAll('.view-details').forEach(button => {
-                            button.addEventListener('click', function() {
-                                const jobId = this.getAttribute('data-job-id');
-                                showJobDetails(jobId);
-                            });
-                        });
-                        
-                        document.querySelectorAll('.clear-job').forEach(button => {
-                            button.addEventListener('click', function() {
-                                const jobId = this.getAttribute('data-job-id');
-                                clearJob(jobId);
-                            });
-                        });
-                    })
-                    .catch(error => {
-                        console.error('Error loading jobs:', error);
-                        jobsList.innerHTML = '<div class="alert alert-danger">Error loading jobs</div>';
-                    });
-            }
-            
-            function showJobDetails(jobId) {
-                fetch(`/api/job-status/${jobId}`)
-                    .then(response => response.json())
-                    .then(job => {
-                        let html = `
-                            <h5>Job Details</h5>
-                            <div class="mb-3">
-                                <strong>Status:</strong> ${job.status}
-                            </div>
-                            <div class="mb-3">
-                                <strong>Started:</strong> ${new Date(job.start_time * 1000).toLocaleString()}
-                            </div>
-                            <div class="mb-3">
-                                <strong>Source:</strong> ${job.source_type} (${job.source_value})
-                            </div>
-                            <div class="mb-3">
-                                <strong>Message:</strong> ${job.message || 'No message'}
-                            </div>
-                        `;
-                        
-                        if (job.missing_artwork && job.missing_artwork.length > 0) {
-                            html += `
-                                <h5 class="mt-4">Albums Missing Artwork (${job.missing_artwork.length})</h5>
-                                <div class="album-list">
-                            `;
-                            
-                            job.missing_artwork.forEach(album => {
-                                html += `
-                                    <div class="album-item">
-                                        <strong>${album.artist}</strong> - ${album.album}
-                                    </div>
-                                `;
-                            });
-                            
-                            html += '</div>';
-                        }
-                        
-                        if (job.successful_uploads || job.failed_uploads) {
-                            html += `
-                                <h5 class="mt-4">Upload Results</h5>
-                                <div class="mb-3">
-                                    <strong>Successful uploads:</strong> ${job.successful_uploads || 0}
-                                </div>
-                                <div class="mb-3">
-                                    <strong>Failed uploads:</strong> ${job.failed_uploads || 0}
-                                </div>
-                            `;
-                        }
-                        
-                        jobDetailsContent.innerHTML = html;
-                        jobDetailsModal.show();
-                    })
-                    .catch(error => {
-                        console.error('Error loading job details:', error);
-                        jobDetailsContent.innerHTML = '<div class="alert alert-danger">Error loading job details</div>';
-                        jobDetailsModal.show();
-                    });
-            }
-            
-            function clearJob(jobId) {
-                if (confirm('Are you sure you want to clear this job?')) {
-                    fetch(`/api/clear-job/${jobId}`, {
-                        method: 'DELETE'
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === 'success') {
-                            loadJobs();
-                        } else {
-                            showAlert('Error clearing job: ' + (data.message || 'Unknown error'), 'danger');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error clearing job:', error);
-                        showAlert('Error clearing job', 'danger');
-                    });
-                }
-            }
-            
-            function showAlert(message, type) {
-                const alertDiv = document.createElement('div');
-                alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
-                alertDiv.role = 'alert';
-                alertDiv.innerHTML = `
-                    ${message}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                `;
-                
-                // Insert at the top of the active tab
-                const activeTab = document.querySelector('.tab-pane.active');
-                activeTab.insertBefore(alertDiv, activeTab.firstChild);
-                
-                // Auto-dismiss after 5 seconds
-                setTimeout(() => {
-                    const bsAlert = new bootstrap.Alert(alertDiv);
-                    bsAlert.close();
-                }, 5000);
-            }
-            
-            // Initialize form fields
-            updateFormFields();
-            
-            // Auto-refresh jobs every 10 seconds if there are running jobs
-            setInterval(() => {
-                const activeTab = document.querySelector('.tab-pane.active');
-                if (activeTab.id === 'jobs') {
-                    loadJobs();
-                }
-            }, 10000);
-        });
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>

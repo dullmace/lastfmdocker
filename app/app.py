@@ -44,6 +44,8 @@ jobs = {}
 def process_albums(job_id, source_type, source_value, lastfm_username=None, lastfm_sources=None, 
                   check_only=False, lastfm_email=None, lastfm_password=None):
     """Process albums in a background thread"""
+    logger.info(f"Job {job_id} status: {jobs[job_id]}")
+
     try:
         jobs[job_id]['status'] = 'running'
         jobs[job_id]['progress'] = 0
