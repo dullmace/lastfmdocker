@@ -73,6 +73,46 @@
                                 <label for="lastfmUsername" class="form-label">Last.fm Username</label>
                                 <input type="text" class="form-control" id="lastfmUsername" placeholder="Enter Last.fm username">
                             </div>
+                            <div class="mb-3 hidden" id="lastfmSourcesField">
+                                <label class="form-label">Last.fm Data Sources</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="recenttracks" id="recentTracks">
+                                    <label class="form-check-label" for="recentTracks">Recently Played Tracks</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="lovedtracks" id="lovedTracks">
+                                    <label class="form-check-label" for="lovedTracks">Loved Tracks</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="topalbums_7day" id="topAlbums7day">
+                                    <label class="form-check-label" for="topAlbums7day">Top Albums - Last 7 Days</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="topalbums_1month" id="topAlbums1month">
+                                    <label class="form-check-label" for="topAlbums1month">Top Albums - Last Month</label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="checkOnly">
+                                    <label class="form-check-label" for="checkOnly">Check only (don't upload artwork)</label>
+                                </div>
+                            </div>
+                            <div class="mb-3 hidden" id="lastfmCredentialsField">
+                                <div class="card">
+                                    <div class="card-header">Last.fm Login Credentials (for uploading)</div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label for="lastfmEmail" class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="lastfmEmail" placeholder="Enter Last.fm email">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="lastfmPassword" class="form-label">Password</label>
+                                            <input type="password" class="form-control" id="lastfmPassword" placeholder="Enter Last.fm password">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <button type="submit" class="btn btn-primary">Start Job</button>
                         </form>
                     </div>
@@ -124,6 +164,29 @@
                             </div>
                             <button type="submit" class="btn btn-primary">Save Settings</button>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Job Details Modal -->
+        <div class="modal fade" id="jobDetailsModal" tabindex="-1" aria-labelledby="jobDetailsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="jobDetailsModalLabel">Job Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="jobDetailsContent">
+                        <div class="text-center py-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Loading job details...</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
