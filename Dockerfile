@@ -38,10 +38,10 @@ RUN apt-get update && apt-get install -y \
 
 # Install chromedriver
 RUN wget "https://storage.googleapis.com/chrome-for-testing-public/133.0.6943.141/linux64/chromedriver-linux64.zip" \
-    && unzip chromedriver_linux64.zip \
+    && unzip chromedriver-linux64.zip \
     && mv chromedriver /usr/local/bin/ \
     && chmod +x /usr/local/bin/chromedriver \
-    && rm chromedriver_linux64.zip
+    && rm chromedriver-linux64.zip
     
 # Set working directory
 WORKDIR /app
